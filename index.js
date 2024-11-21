@@ -1,13 +1,13 @@
-let direction = {x: 0, y: 0};
-let speed = 5;
-let score = 0;
-let lastPaintTime = 0;
-let snakeArr = [
-    {x: 10, y: 10}
-];
+let blocksize = 25
+let rows = 20
+let board
+let context
 
-food = {x: 5, y: 5};
+window.onload = ()=>{
+    board = document.getElementById("board")
+    board.height = rows * blocksize
+    board.width = cols * blocksize
+    context = board.getContext("2d");
 
-function main() {}
-function isCollide() {}
-function gameEngine() {}
+    update();
+}
