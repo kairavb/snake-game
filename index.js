@@ -1,12 +1,12 @@
-let blocksize = 15
-let rows = 20
-let cols = 20
+let blocksize = 20
+let rows
+let cols
 let board
 let context
 
 // snake cord
-let snakeX = blocksize * 5
-let snakeY = blocksize * 5
+let snakeX
+let snakeY
 
 let snakeBody = []
 
@@ -23,13 +23,28 @@ let gameOver = false
 window.onload = ()=>{
     board = document.getElementById("board")
     score = document.getElementById("score")
-    board.height = rows * blocksize
-    board.width = cols * blocksize
+
+    // Set the canvas to fill the parent div's size (class="content")
+    const contentDiv = document.querySelector('.content');
+    const contentWidth = contentDiv.offsetWidth;
+    const contentHeight = contentDiv.offsetHeight;
+
+    // Set the canvas size
+    board.width = contentWidth;
+    board.height = contentHeight;
+
+    // Dynamically calculate rows and cols based on the board size
+    rows = Math.floor(board.height / blocksize);
+    cols = Math.floor(board.width / blocksize);
+
     context = board.getContext("2d")  // to draw on board
+
+    snakeX = Math.floor(cols / 2) * blocksize;  // Center x position
+    snakeY = Math.floor(rows / 2) * blocksize;  // Center y position
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
-    setInterval(update, 1000/10)  // 100 milliseconds
+    setInterval(update, 120)  // milliseconds
 }
 
 function drawCircle(x, y, radius) {
@@ -45,12 +60,11 @@ function update() {
         return
     }
 
-    context.fillStyle = "white";
+    context.fillStyle = "#121212";
     context.fillRect(0, 0, board.width, board.height)
     
     context.fillStyle = "red";
     drawCircle(foodX, foodY, blocksize / 2);
-    // context.fillRect(foodX, foodY, blocksize, blocksize)
 
     if (snakeX == foodX && snakeY == foodY){
         snakeBody.push([foodX, foodY])
@@ -68,11 +82,11 @@ function update() {
 
     snakeX += velX * blocksize
     snakeY += velY * blocksize
-    context.fillStyle = "lime";
-    context.fillRect(snakeX, snakeY, blocksize, blocksize)
-    context.fillStyle = "green";
+    context.fillStyle = "#fff";
+    drawCircle(snakeX, snakeY, blocksize / 2);
+    context.fillStyle = "#b8b8b8";
     for (let i = 0; i < snakeBody.length; i++){
-        context.fillRect(snakeBody[i][0], snakeBody[i][1], blocksize, blocksize )
+        drawCircle(snakeBody[i][0], snakeBody[i][1], blocksize / 2);
     }
 
     if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize) {
