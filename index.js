@@ -1,4 +1,4 @@
-let blocksize = 25
+let blocksize = 15
 let rows = 20
 let cols = 20
 let board
@@ -22,17 +22,26 @@ let gameOver = false
 
 window.onload = ()=>{
     board = document.getElementById("board")
+    score = document.getElementById("score")
     board.height = rows * blocksize
     board.width = cols * blocksize
-    context = board.getContext("2d");  // to draw on board
+    context = board.getContext("2d")  // to draw on board
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
     setInterval(update, 1000/10)  // 100 milliseconds
 }
 
+function drawCircle(x, y, radius) {
+    context.beginPath();
+    context.arc(x + radius, y + radius, radius, 0, Math.PI * 2);  // Draw circle
+    context.fill();
+    context.closePath();
+}
+
 function update() {
     if (gameOver) {
+        console.log('gameover')
         return
     }
 
@@ -40,32 +49,41 @@ function update() {
     context.fillRect(0, 0, board.width, board.height)
     
     context.fillStyle = "red";
-    context.fillRect(foodX, foodY, blocksize, blocksize)
+    drawCircle(foodX, foodY, blocksize / 2);
+    // context.fillRect(foodX, foodY, blocksize, blocksize)
 
     if (snakeX == foodX && snakeY == foodY){
         snakeBody.push([foodX, foodY])
         placeFood()
+        score.textContent = parseInt(score.textContent) + 1
     }
 
-    for (let i = snakeBody.length - 1; i>0; i--) {
-        snakeBody[i] = snakeBody[i-1];
+    for (let i = snakeBody.length - 1; i > 0; i--) {
+        snakeBody[i] = snakeBody[i - 1];
     }
 
     if (snakeBody.length){
         snakeBody[0] = [snakeX, snakeY]
     }
 
-    context.fillStyle = "lime";
     snakeX += velX * blocksize
     snakeY += velY * blocksize
+    context.fillStyle = "lime";
     context.fillRect(snakeX, snakeY, blocksize, blocksize)
-    for (let i = 0; snakeBody.length; i++){
+    context.fillStyle = "green";
+    for (let i = 0; i < snakeBody.length; i++){
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blocksize, blocksize )
     }
 
-    if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize){
-        gameOver = true
-        alert("lol")
+    if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize) {
+        gameOver = true;
+        return
+    }
+
+    for (let i = 0; i < snakeBody.length; i++){
+        if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]){
+            gameOver = true
+        }
     }
 }
 
