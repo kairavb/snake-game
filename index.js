@@ -17,7 +17,7 @@ let velY = 0
 // food cord
 let foodX
 let foodY
-
+let snakeSpeed = 5
 let gameOver = false
 
 window.onload = ()=>{
@@ -44,7 +44,7 @@ window.onload = ()=>{
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
-    setInterval(update, 120)  // milliseconds
+    setInterval(update, 1000/30)  // FPS
 }
 
 function drawCircle(x, y, radius) {
@@ -66,7 +66,17 @@ function update() {
     context.fillStyle = "red";
     drawCircle(foodX, foodY, blocksize / 2);
 
-    if (snakeX == foodX && snakeY == foodY){
+    if (
+        (snakeX == foodX && snakeY == foodY) || 
+        (snakeX == foodX - 5 && snakeY == foodY - 5) ||
+        (snakeX == foodX - 5 && snakeY == foodY + 5) ||
+        (snakeX == foodX + 5 && snakeY == foodY + 5) ||
+        (snakeX == foodX + 5 && snakeY == foodY - 5) ||
+        (snakeX == foodX - 10 && snakeY == foodY - 10) ||
+        (snakeX == foodX - 10 && snakeY == foodY + 10) ||
+        (snakeX == foodX + 10 && snakeY == foodY + 10) ||
+        (snakeX == foodX + 10 && snakeY == foodY - 10)
+    ){
         snakeBody.push([foodX, foodY])
         placeFood()
         score.textContent = parseInt(score.textContent) + 1
@@ -80,8 +90,8 @@ function update() {
         snakeBody[0] = [snakeX, snakeY]
     }
 
-    snakeX += velX * blocksize
-    snakeY += velY * blocksize
+    snakeX += velX * snakeSpeed
+    snakeY += velY * snakeSpeed
     context.fillStyle = "#fff";
     drawCircle(snakeX, snakeY, blocksize / 2);
     context.fillStyle = "#b8b8b8";
