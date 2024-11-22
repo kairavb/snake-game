@@ -25,46 +25,54 @@ window.onload = ()=>{
     score = document.getElementById("score")
 
     // Set the canvas to fill the parent div's size (class="content")
-    const contentDiv = document.querySelector('.content');
-    const contentWidth = contentDiv.offsetWidth;
-    const contentHeight = contentDiv.offsetHeight;
+    const contentDiv = document.querySelector('.content')
+    const contentWidth = contentDiv.offsetWidth
+    const contentHeight = contentDiv.offsetHeight
 
     // Set the canvas size
-    board.width = contentWidth;
-    board.height = contentHeight;
+    board.width = contentWidth
+    board.height = contentHeight
 
     // Dynamically calculate rows and cols based on the board size
-    rows = Math.floor(board.height / blocksize);
-    cols = Math.floor(board.width / blocksize);
+    rows = Math.floor(board.height / blocksize)
+    cols = Math.floor(board.width / blocksize)
 
     context = board.getContext("2d")  // to draw on board
 
-    snakeX = Math.floor(cols / 2) * blocksize;  // Center x position
-    snakeY = Math.floor(rows / 2) * blocksize;  // Center y position
+    snakeX = Math.floor(cols / 2) * blocksize  // Center x position
+    snakeY = Math.floor(rows / 2) * blocksize  // Center y position
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
+    document.addEventListener("keydown", function(e) {
+        if (gameOver && e.code == "KeyF") {
+            restartGame()
+        }
+    })
     setInterval(update, 1000/30)  // FPS
 }
 
 function drawCircle(x, y, radius) {
-    context.beginPath();
-    context.arc(x + radius, y + radius, radius, 0, Math.PI * 2);  // Draw circle
-    context.fill();
-    context.closePath();
+    context.beginPath()
+    context.arc(x + radius, y + radius, radius, 0, Math.PI * 2)  // Draw circle
+    context.fill()
+    context.closePath()
 }
 
 function update() {
     if (gameOver) {
-        console.log('gameover')
+        context.fillStyle = "#fff"
+        context.font = "30px Arial"
+        context.fillText("Game Over", board.width / 2 - 80, board.height / 2 - 20)
+        context.fillText("Press F to Restart", board.width / 2 - 120, board.height / 2 + 20)
         return
     }
 
-    context.fillStyle = "#121212";
+    context.fillStyle = "#121212"
     context.fillRect(0, 0, board.width, board.height)
     
-    context.fillStyle = "red";
-    drawCircle(foodX, foodY, blocksize / 2);
+    context.fillStyle = "red"
+    drawCircle(foodX, foodY, blocksize / 2)
 
     if (
         (snakeX == foodX && snakeY == foodY) || 
@@ -83,7 +91,7 @@ function update() {
     }
 
     for (let i = snakeBody.length - 1; i > 0; i--) {
-        snakeBody[i] = snakeBody[i - 1];
+        snakeBody[i] = snakeBody[i - 1]
     }
 
     if (snakeBody.length){
@@ -92,15 +100,15 @@ function update() {
 
     snakeX += velX * snakeSpeed
     snakeY += velY * snakeSpeed
-    context.fillStyle = "#fff";
+    context.fillStyle = "#fff"
     drawCircle(snakeX, snakeY, blocksize / 2);
-    context.fillStyle = "#b8b8b8";
+    context.fillStyle = "#b8b8b8"
     for (let i = 0; i < snakeBody.length; i++){
-        drawCircle(snakeBody[i][0], snakeBody[i][1], blocksize / 2);
+        drawCircle(snakeBody[i][0], snakeBody[i][1], blocksize / 2)
     }
 
     if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize) {
-        gameOver = true;
+        gameOver = true
         return
     }
 
@@ -109,6 +117,19 @@ function update() {
             gameOver = true
         }
     }
+}
+
+function restartGame() {
+    // Reset all variables
+    snakeX = Math.floor(cols / 2) * blocksize
+    snakeY = Math.floor(rows / 2) * blocksize
+    snakeBody = []
+    velX = 0
+    velY = 0
+    snakeSpeed = 5
+    gameOver = false
+    score.textContent = "0"
+    placeFood()
 }
 
 function changeDirection(e) {
