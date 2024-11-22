@@ -1,4 +1,8 @@
-let blocksize = 20
+// constants
+const BLOCKSIZE = 20
+const FPS = 30
+
+// board
 let rows
 let cols
 let board
@@ -17,6 +21,7 @@ let velY = 0
 // food cord
 let foodX
 let foodY
+
 let snakeSpeed = 5
 let gameOver = false
 
@@ -34,13 +39,13 @@ window.onload = ()=>{
     board.height = contentHeight
 
     // Dynamically calculate rows and cols based on the board size
-    rows = Math.floor(board.height / blocksize)
-    cols = Math.floor(board.width / blocksize)
+    rows = Math.floor(board.height / BLOCKSIZE)
+    cols = Math.floor(board.width / BLOCKSIZE)
 
     context = board.getContext("2d")  // to draw on board
 
-    snakeX = Math.floor(cols / 2) * blocksize  // Center x position
-    snakeY = Math.floor(rows / 2) * blocksize  // Center y position
+    snakeX = Math.floor(cols / 2) * BLOCKSIZE  // Center x position
+    snakeY = Math.floor(rows / 2) * BLOCKSIZE  // Center y position
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
@@ -49,7 +54,7 @@ window.onload = ()=>{
             restartGame()
         }
     })
-    setInterval(update, 1000/30)  // FPS
+    setInterval(update, 1000/FPS)
 }
 
 function drawCircle(x, y, radius) {
@@ -72,7 +77,7 @@ function update() {
     context.fillRect(0, 0, board.width, board.height)
     
     context.fillStyle = "red"
-    drawCircle(foodX, foodY, blocksize / 2)
+    drawCircle(foodX, foodY, BLOCKSIZE / 2)
 
     if (
         (snakeX == foodX && snakeY == foodY) || 
@@ -101,13 +106,13 @@ function update() {
     snakeX += velX * snakeSpeed
     snakeY += velY * snakeSpeed
     context.fillStyle = "#fff"
-    drawCircle(snakeX, snakeY, blocksize / 2);
+    drawCircle(snakeX, snakeY, BLOCKSIZE / 2);
     context.fillStyle = "#b8b8b8"
     for (let i = 0; i < snakeBody.length; i++){
-        drawCircle(snakeBody[i][0], snakeBody[i][1], blocksize / 2)
+        drawCircle(snakeBody[i][0], snakeBody[i][1], BLOCKSIZE / 2)
     }
 
-    if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize) {
+    if (snakeX < 0 || snakeX >= cols * BLOCKSIZE || snakeY < 0 || snakeY >= rows * BLOCKSIZE) {
         gameOver = true
         return
     }
@@ -121,8 +126,8 @@ function update() {
 
 function restartGame() {
     // Reset all variables
-    snakeX = Math.floor(cols / 2) * blocksize
-    snakeY = Math.floor(rows / 2) * blocksize
+    snakeX = Math.floor(cols / 2) * BLOCKSIZE
+    snakeY = Math.floor(rows / 2) * BLOCKSIZE
     snakeBody = []
     velX = 0
     velY = 0
@@ -152,7 +157,6 @@ function changeDirection(e) {
 }
 
 function placeFood() {
-    // floor(0-1 * 0-19.99) = 0-19
-    foodX = Math.floor(Math.random() * cols) * blocksize
-    foodY = Math.floor(Math.random() * rows) * blocksize
+    foodX = Math.floor(Math.random() * cols) * BLOCKSIZE
+    foodY = Math.floor(Math.random() * rows) * BLOCKSIZE
 }
