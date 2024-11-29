@@ -49,6 +49,17 @@ window.onload = ()=>{
 
     placeFood()
     document.addEventListener("keyup", changeDirection)
+    let startX, startY
+    document.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX
+        startY = e.touches[0].clientY
+    })
+
+    document.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX
+        const endY = e.changedTouches[0].clientY
+        handleSwipe(startX, startY, endX, endY)
+    })
     document.addEventListener("keydown", function(e) {
         if (gameOver && e.code == "KeyF") {
             restartGame()
@@ -137,6 +148,7 @@ function restartGame() {
     placeFood()
 }
 
+// Change direction based on keyboard
 function changeDirection(e) {
     if (e.code == "ArrowUp" && velY != 1) {
         velX = 0
@@ -153,6 +165,32 @@ function changeDirection(e) {
     else if (e.code == "ArrowRight" && velX != -1) {
         velX = 1
         velY = 0
+    }
+}
+
+// Handle swipe direction for mobile
+function handleSwipe(startX, startY, endX, endY) {
+    const diffX = endX - startX
+    const diffY = endY - startY
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        // Horizontal swipe
+        if (diffX > 0 && velX != -1) {
+            velX = 1 // Right
+            velY = 0
+        } else if (diffX < 0 && velX != 1) {
+            velX = -1 // Left
+            velY = 0
+        }
+    } else {
+        // Vertical swipe
+        if (diffY > 0 && velY != -1) {
+            velX = 0
+            velY = 1 // Down
+        } else if (diffY < 0 && velY != 1) {
+            velX = 0
+            velY = -1 // Up
+        }
     }
 }
 
