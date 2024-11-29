@@ -77,10 +77,15 @@ function drawCircle(x, y, radius) {
 
 function update() {
     if (gameOver) {
+        const screenWidth = window.screen.width;
         context.fillStyle = "#fff"
         context.font = "30px Arial"
         context.fillText("Game Over", board.width / 2 - 80, board.height / 2 - 20)
-        context.fillText("Press F to Restart", board.width / 2 - 120, board.height / 2 + 20)
+        if (screenWidth < 768){
+            context.fillText("Reload to Restart", board.width / 2 - 120, board.height / 2 + 20)
+        }else{
+            context.fillText("Press F to Restart", board.width / 2 - 120, board.height / 2 + 20)
+        }
         return
     }
 
