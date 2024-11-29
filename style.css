@@ -53,3 +53,15 @@ body {
     display: block;
     background-color: white;
 }
+
+@media (max-width: 768px) {
+    .container {
+        margin: 0px;
+        border-radius: 0px;
+        border: none;
+    }
+
+    #board {
+        border-radius: 0px;
+    }
+}
