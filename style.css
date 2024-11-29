@@ -7,6 +7,7 @@ body {
     color: #fff;
     height: 100vh; /* Ensure body takes full height of the viewport */
     display: flex;
+    overflow: hidden;
     flex-direction: column; /* Flexbox for vertical stacking */
 }
 
@@ -20,7 +21,7 @@ body {
 }
 
 .content {
-    overflow-y: auto; /* Enable scrolling inside the content box */
+    overflow: hidden; /* Remove scrolling inside the content box */
     flex-grow: 1; /* Make the content area fill the remaining space */
 }
 
@@ -31,7 +32,6 @@ body {
     align-items: center;
     padding: 12px 20px;
     border-bottom: 2px solid #fff;
-    position: sticky;
     top: 0;
     background-color: #121212; /* Match background to avoid flickering */
     z-index: 1000; /* Ensure navbar stays on top */
@@ -58,7 +58,7 @@ body {
     .container {
         margin: 0px;
         border-radius: 0px;
-        border: none;
+        max-height: 90vh;
     }
 
     #board {
