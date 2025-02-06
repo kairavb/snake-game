@@ -1,5 +1,5 @@
 // constants
-const BLOCKSIZE = 20
+const BLOCKSIZE = 25
 const FPS = 30
 
 // board
@@ -106,8 +106,10 @@ function update() {
         (snakeX == foodX + 10 && snakeY == foodY + 10) ||
         (snakeX == foodX + 10 && snakeY == foodY - 10)
     ){
-        snakeBody.push([foodX, foodY])
-        placeFood()
+        for (let i = 0; i < 5; i++){
+			snakeBody.push([snakeX, snakeY])
+		}
+		placeFood()
         score.textContent = parseInt(score.textContent) + 1
     }
 
@@ -150,7 +152,7 @@ function restartGame() {
     snakeSpeed = 5
     gameOver = false
     score.textContent = "0"
-    placeFood()
+	placeFood()
 }
 
 // Change direction based on keyboard
